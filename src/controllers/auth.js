@@ -4,6 +4,7 @@ const {
   getUserWithoutPassword,
   hashPassword,
   sendEmailForRegistration,
+  sendEmailForResetPassword,
 } = require('../utils/auth');
 const User = require('../models/user');
 
@@ -31,9 +32,18 @@ const user_activation = async (req, res) => {
   return res.status(status.OK).send();
 };
 
+// Send Email For Reseting Password
+const send_email_confirmation = async (req, res) => {
+  const user = res.locals.user;
+  await sendEmailForResetPassword(user);
+  return res.status(status.OK).json({
+    user: getUserWithoutPassword(user),
+  });
+};
+
 const change_password = async (req, res) => {
   const user = res.locals.user;
-  user.password = hashPassword(req.body.password);
+  user.password = hashPassword(req.body.newPassword);
   await user.save();
   return res.status(status.OK).send();
 };
@@ -43,5 +53,6 @@ module.exports = {
   login,
   user_activation,
   change_password,
+  send_email_confirmation,
 };
 

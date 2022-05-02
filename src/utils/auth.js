@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const transporter = require('../config/email');
+const { sendEmail } = require('./email');
 
 const token_key = process.env.TOKEN_KEY;
 const URL = process.env.FRONTEND_URL;
@@ -46,12 +46,20 @@ const verifyToken = (token) => {
 
 const sendEmailForRegistration = async (user) => {
   const token = generateRegistrationToken(user.id);
-  await transporter.sendMail({
-    from: '<app@gmail.com>',
-    to: user.email,
-    subject: "Vérification de l'email",
-    html: `Votre email de vérification: <a href="${URL}/email-verify/${token}">lien</a>`,
-  });
+  await sendEmail(
+    email,
+    "Vérification de l'email",
+    `Votre email de vérification: <a href="${URL}/email-verify/${token}">lien</a>`
+  );
+};
+
+const sendEmailForResetPassword = async (user) => {
+  const token = generateToken(user, '1h');
+  await sendEmail(
+    user.email,
+    'Changer le mot de passe',
+    `Votre email de changement de mot de passe: <a href="${URL}/send-email-verification/${token}">lien</a>`
+  );
 };
 
 const getUserWithoutPassword = (user) => {
@@ -71,5 +79,6 @@ module.exports = {
   sendEmailForRegistration,
   getUserWithoutPassword,
   generateRegistrationToken,
+  sendEmailForResetPassword,
 };
 

@@ -2,6 +2,8 @@ const status = require('http-status');
 const User = require('../models/user');
 const { findOneBy } = require('../repository/user');
 const { verifyToken, checkPassword } = require('../utils/auth');
+const { joi_errors } = require('../utils/error');
+const { newPasswordSchema, emailSchema } = require('../validators/auth');
 const { loginSchema } = require('../validators/user');
 
 const login_required = async (req, res, next) => {
@@ -22,7 +24,7 @@ const login_required = async (req, res, next) => {
 
 const login_form_required = async (req, res, next) => {
   const validation = loginSchema.validate(req.body, { abortEarly: false });
-  if (validation.error){
+  if (validation.error) {
     return res.status(status.BAD_REQUEST).json({
       error: validation.error,
     });
@@ -55,10 +57,44 @@ const valid_token = async (req, res, next) => {
   next();
 };
 
+// Send Email Verification For Reset Password
+const valid_email = async (req, res, next) => {
+  const validation = emailSchema.validate(req.body);
+  if (validation.error)
+    return res.status(status.BAD_REQUEST).json(validation.error);
+  next();
+};
+
+const valid_user = async (req, res, next) => {
+  const user = await findOneBy({ email: req.email });
+  if (!user) return res.status(status.NOT_FOUND).send();
+  res.locals.user = user;
+  next();
+};
+
+// Reset Password
+const valid_reset_password = async (req, res, next) => {
+  const validation = newPasswordSchema.validate(req.body);
+  if (validation.error)
+    return res.status(status.BAD_REQUEST).json(validation.error);
+  next();
+};
+
+const valid_old_password = async (req, res, next) => {
+  const user = res.locals.user;
+  const checked = checkPassword(req.body.password, user.password);
+  if (!checked) return joi_errors('Le mot de passe est incorrect.', 'password');
+  next();
+};
+
 module.exports = {
   login_required,
   login_form_required,
   login_user_required,
   valid_token,
+  valid_email,
+  valid_user,
+  valid_reset_password,
+  valid_old_password,
 };
 
