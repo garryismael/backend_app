@@ -47,18 +47,23 @@ const verifyToken = (token) => {
 const sendEmailForRegistration = async (user) => {
   const token = generateRegistrationToken(user.id);
   await sendEmail(
-    email,
+    user.email,
     "Vérification de l'email",
     `Votre email de vérification: <a href="${URL}/email-verify/${token}">lien</a>`
   );
 };
 
 const sendEmailForResetPassword = async (user) => {
-  const token = generateToken(user, '1h');
+  const token = getToken(
+    {
+      id: user.id,
+    },
+    { expiresIn: '1h' }
+  );
   await sendEmail(
     user.email,
     'Changer le mot de passe',
-    `Votre email de changement de mot de passe: <a href="${URL}/send-email-verification/${token}">lien</a>`
+    `Votre email de changement de mot de passe: <a href="${URL}/reset-password/${token}">lien</a>`
   );
 };
 
@@ -71,6 +76,15 @@ const getUserWithoutPassword = (user) => {
   };
 };
 
+const factory_registration = (user) => {
+  return user !== null && !user.estverifie
+}
+
+const factory_reset_password = (user) => {
+  return user !== null;
+}
+
+
 module.exports = {
   hashPassword,
   checkPassword,
@@ -80,5 +94,7 @@ module.exports = {
   getUserWithoutPassword,
   generateRegistrationToken,
   sendEmailForResetPassword,
+  factory_registration,
+  factory_reset_password
 };
 

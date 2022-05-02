@@ -14,6 +14,7 @@ const {
   valid_email,
   valid_reset_password,
   valid_old_password,
+  valid_token_reset_password,
 } = require('../middlewares/auth');
 const {
   valid_registration,
@@ -36,7 +37,7 @@ router.post(
 );
 router.post(
   '/reset-password/:token',
-  [valid_reset_password, valid_token, valid_old_password],
+  [valid_reset_password, valid_token_reset_password, valid_old_password],
   change_password
 );
 router.get('/email-verify/:token', valid_token, user_activation);
