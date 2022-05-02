@@ -1,18 +1,25 @@
 const express = require('express');
-const { register } = require('../controllers/user');
+const { register, user_activation, login } = require('../controllers/auth');
 const {
-  register_middleware,
+  valid_token,
+  login_form_required,
+  login_user_required,
+} = require('../middlewares/auth');
+const {
+  valid_registration,
   unique_email,
   unique_username,
 } = require('../middlewares/user');
 const router = express.Router();
 
-/* GET users listing. */
 router.post(
   '/register',
-  [register_middleware, unique_email, unique_username],
+  [valid_registration, unique_email, unique_username],
   register
 );
 
+router.get('/email-verify/:token', valid_token, user_activation);
+
+router.post('/login', [login_form_required, login_user_required], login);
 module.exports = router;
 

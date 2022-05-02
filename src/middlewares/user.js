@@ -1,51 +1,40 @@
 const { registerSchema } = require('../validators/user');
-const User = require('../models/user');
 const joi_errors = require('../utils/error');
 
 const status = require('http-status');
+const { findBy } = require('../repository/user');
 
-const register_middleware = (req, res, next) => {
+const valid_registration = (req, res, next) => {
   const validation = registerSchema.validate(req.body, {
     abortEarly: false,
   });
   if (validation.error)
     return res.status(status.BAD_REQUEST).json({ errors: validation.error });
-  else next();
+  next();
 };
 
 const unique_email = async (req, res, next) => {
-  const email = req.body.email;
-  const user = await User.findOne({
-    where: {
-      email,
-    },
-  });
+  const user = await findBy({ email: req.body.email });
   if (user !== null) {
     return res.status(status.BAD_REQUEST).json({
       error: joi_errors("L'email existe déjà.", 'email'),
     });
-  } else {
-    next();
   }
+  next();
 };
 
 const unique_username = async (req, res, next) => {
-  const username = req.body.username;
-  const user = await User.findOne({
-    where: {
-      username,
-    },
-  });
+  const user = await findBy({ username: req.body.username });
   if (user !== null) {
     return res.status(status.BAD_REQUEST).json({
       error: joi_errors("Le nom d'utilisateur existe déjà", 'username'),
     });
-  } else {
-    next();
   }
+  next();
 };
+
 module.exports = {
-  register_middleware,
+  valid_registration,
   unique_email,
   unique_username,
 };

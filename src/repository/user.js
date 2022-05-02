@@ -1,23 +1,12 @@
 const User = require('../models/user');
 
-const getLoggedUser = async (user_id, email) => {
-  const user = await User.findOne({
-    where: {
-      id: user_id,
-      email,
-    },
-  });
-  return user;
-};
-
-const getUserByEmail = async (email) => {
+const findBy = async (search) => {
   return await User.findOne({
-    where: { email },
+    where: search,
   });
 };
 
 module.exports = {
-  getLoggedUser,
-  getUserByEmail,
+  findBy,
 };
 

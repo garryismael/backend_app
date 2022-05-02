@@ -1,14 +1,15 @@
+const httpStatus = require('http-status');
 const User = require('../models/user');
-const { hashPassword } = require('../utils/auth');
 
-const register = async (req, res) => {
-  req.body.password = hashPassword(req.body.password);
-  const user = User.build(req.body);
-  await user.save();
-  return res.status(201).send();
+// lister les utilisateurs
+const get_users = async (req, res) => {
+  const users = await User.findAll({
+    attributes: { exclude: 'password' },
+  });
+  return res.status(httpStatus.OK).json(users);
 };
 
 module.exports = {
-  register,
+  get_users,
 };
 

@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 const authRouter = require('./src/routes/auth');
-
+const userRouter = require('./src/routes/user');
 const app = express();
 
 app.use(logger('dev'));
@@ -17,6 +17,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
 
 // const User = require('./src/models/user');
 // (async function() {

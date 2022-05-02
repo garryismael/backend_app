@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const transporter = require('../config/email');
 
 const token_key = process.env.TOKEN_KEY;
+const URL = process.env.FRONTEND_URL;
 
 const hashPassword = (password) => {
   return bcrypt.hashSync(password, 8);
@@ -43,12 +44,13 @@ const verifyToken = (token) => {
   }
 };
 
-const sendEmailForRegistration = async (email, token) => {
+const sendEmailForRegistration = async (user) => {
+  const token = generateRegistrationToken(user.id);
   await transporter.sendMail({
     from: '<app@gmail.com>',
-    to: email,
+    to: user.email,
     subject: "Vérification de l'email",
-    html: `Votre email de vérification: <a href="${FRONTEND_URL}/email-verify/${token}">lien</a>`,
+    html: `Votre email de vérification: <a href="${URL}/email-verify/${token}">lien</a>`,
   });
 };
 

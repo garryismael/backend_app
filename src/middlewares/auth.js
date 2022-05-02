@@ -1,6 +1,6 @@
 const status = require('http-status');
 const User = require('../models/user');
-const { getLoggedUser, getUserByEmail } = require('../repository/user');
+const { findBy } = require('../repository/user');
 const { verifyToken, checkPassword } = require('../utils/auth');
 const { loginSchema } = require('../validators/user');
 
@@ -12,54 +12,53 @@ const login_required = async (req, res, next) => {
     const tokenData = verifyToken(token);
     if (tokenData) {
       const { user_id, email } = tokenData;
-      const user = await getLoggedUser(user_id, email);
-      if (user) {
-        logged = true;
-      }
+      const user = await findBy({ id: user_id, email, estverifie: true });
+      if (user) logged = true;
     }
   }
-  if (logged) next();
-  else return res.status(status.UNAUTHORIZED).send();
+  if (!logged) return res.status(status.UNAUTHORIZED).send();
+  next();
 };
 
 const login_form_required = async (req, res, next) => {
   const validation = loginSchema.validate(req.body, { abortEarly: false });
-  if (validation.error)
+  if (validation.error){
     return res.status(status.BAD_REQUEST).json({
       error: validation.error,
     });
-  else next();
+  }
+  next();
 };
 
 const login_user_required = async (req, res, next) => {
-  const user = await getUserByEmail(req.body.email);
+  const user = await findBy({ username: req.body.username });
   const password = req.body.password;
   let can_login = user !== null;
   if (can_login && checkPassword(password, user.password)) {
     res.locals.user = user;
     next();
-  } else return res.status(status.UNAUTHORIZED).send();
+  } else return res.status(status.BAD_REQUEST).send();
 };
 
-const user_activation_required = async (req, res, next) => {
+const valid_token = async (req, res, next) => {
   const tokenData = verifyToken(req.params.token);
   let verified = false;
   if (tokenData) {
     const { id } = tokenData;
     const user = await User.findByPk(id);
-    if (user !== null) {
+    if (user !== null && !user.estverifie) {
       verified = true;
       res.locals.user = user;
     }
   }
-  if (verified) next();
-  else return res.status(status.BAD_REQUEST).send();
+  if (!verified) return res.status(status.BAD_REQUEST).send();
+  next();
 };
 
 module.exports = {
   login_required,
   login_form_required,
   login_user_required,
-  user_activation_required,
+  valid_token,
 };
 
