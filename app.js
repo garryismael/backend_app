@@ -19,10 +19,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 
-// const User = require('./src/models/user');
-// (async function() {
-//   await User.sync({ force: true });
-// })();
-
 module.exports = app;
 
