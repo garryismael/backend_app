@@ -1,6 +1,6 @@
 const status = require('http-status');
 const User = require('../models/user');
-const { findBy } = require('../repository/user');
+const { findOneBy } = require('../repository/user');
 const { verifyToken, checkPassword } = require('../utils/auth');
 const { loginSchema } = require('../validators/user');
 
@@ -12,7 +12,7 @@ const login_required = async (req, res, next) => {
     const tokenData = verifyToken(token);
     if (tokenData) {
       const { user_id, email } = tokenData;
-      const user = await findBy({ id: user_id, email, estverifie: true });
+      const user = await findOneBy({ id: user_id, email, estverifie: true });
       if (user) logged = true;
     }
   }
@@ -31,7 +31,7 @@ const login_form_required = async (req, res, next) => {
 };
 
 const login_user_required = async (req, res, next) => {
-  const user = await findBy({ username: req.body.username });
+  const user = await findOneBy({ username: req.body.username });
   const password = req.body.password;
   let can_login = user !== null;
   if (can_login && checkPassword(password, user.password)) {

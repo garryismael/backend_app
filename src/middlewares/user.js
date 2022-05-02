@@ -2,7 +2,7 @@ const { registerSchema } = require('../validators/user');
 const joi_errors = require('../utils/error');
 
 const status = require('http-status');
-const { findBy } = require('../repository/user');
+const { findOneBy } = require('../repository/user');
 
 const valid_registration = (req, res, next) => {
   const validation = registerSchema.validate(req.body, {
@@ -14,7 +14,7 @@ const valid_registration = (req, res, next) => {
 };
 
 const unique_email = async (req, res, next) => {
-  const user = await findBy({ email: req.body.email });
+  const user = await findOneBy({ email: req.body.email });
   if (user !== null) {
     return res.status(status.BAD_REQUEST).json({
       error: joi_errors("L'email existe déjà.", 'email'),
@@ -24,7 +24,7 @@ const unique_email = async (req, res, next) => {
 };
 
 const unique_username = async (req, res, next) => {
-  const user = await findBy({ username: req.body.username });
+  const user = await findOneBy({ username: req.body.username });
   if (user !== null) {
     return res.status(status.BAD_REQUEST).json({
       error: joi_errors("Le nom d'utilisateur existe déjà", 'username'),
