@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "jest": "jest",
-    "test": "jest"
+    "jest": "jest --detectOpenHandles"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
