@@ -20,7 +20,10 @@ const loginRequired = async (req, res, next) => {
     if (tokenData) {
       const { user_id, email } = tokenData;
       const user = await findOneBy({ id: user_id, email, estverifie: true });
-      if (user) logged = true;
+      if (user) {
+        res.locals.user = user;
+        logged = true;
+      }
     }
   }
   if (!logged) return res.status(status.UNAUTHORIZED).send();
