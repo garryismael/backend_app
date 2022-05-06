@@ -1,7 +1,6 @@
 const supertest = require('supertest');
 const httpStatus = require('http-status');
 const app = require('../app');
-const { token } = require('morgan');
 
 jest.mock('../src/utils/email', () => {
   return {
