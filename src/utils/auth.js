@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { sendEmail } = require('./email');
+const User = require('../models/user');
 
-const token_key = process.env.TOKEN_KEY;
+const TOKEN_KEY = process.env.TOKEN_KEY;
 const URL = process.env.FRONTEND_URL;
 
 const hashPassword = (password) => {
@@ -33,12 +34,12 @@ const generateRegistrationToken = (id) => {
 };
 
 const getToken = (payload, expiresIn) => {
-  return jwt.sign(payload, token_key, expiresIn);
+  return jwt.sign(payload, TOKEN_KEY, expiresIn);
 };
 
 const verifyToken = (token) => {
   try {
-    return jwt.verify(token, token_key);
+    return jwt.verify(token, TOKEN_KEY);
   } catch (error) {
     return undefined;
   }
@@ -76,14 +77,23 @@ const getUserWithoutPassword = (user) => {
   };
 };
 
-const factory_registration = (user) => {
-  return user !== null && !user.estverifie
-}
+const IsNewUser = (user) => user !== null && !user.estverifie;
 
-const factory_reset_password = (user) => {
-  return user !== null;
-}
+const checkTokenUserFactory = async (req, res, callback) => {
+  const tokenData = verifyToken(req.params.token);
+  let verified = false;
+  if (tokenData) {
+    const { id } = tokenData;
+    const user = await User.findByPk(id);
+    if (callback(user)) {
+      verified = true;
+      res.locals.user = user;
+    }
+  }
+  return verified;
+};
 
+const IsNotNullUser = (user) => user !== null;
 
 module.exports = {
   hashPassword,
@@ -94,7 +104,8 @@ module.exports = {
   getUserWithoutPassword,
   generateRegistrationToken,
   sendEmailForResetPassword,
-  factory_registration,
-  factory_reset_password
+  IsNewUser,
+  IsNotNullUser,
+  checkTokenUserFactory,
 };
 

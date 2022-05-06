@@ -1,4 +1,4 @@
-const joi_errors = (message, path) => {
+module.exports = (message, path) => {
   return {
     details: [
       {
@@ -7,9 +7,5 @@ const joi_errors = (message, path) => {
       },
     ],
   };
-};
-
-module.exports = {
-    joi_errors,
 };
 

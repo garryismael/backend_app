@@ -7,40 +7,36 @@ const {
   changePassword,
 } = require('../controllers/auth');
 const {
-  valid_token,
-  login_form_required,
-  login_user_required,
-  valid_user,
-  valid_email,
-  valid_reset_password,
-  valid_old_password,
-  valid_token_reset_password,
+  checkToken,
+  checkLoginForm,
+  checkLoginUser,
+  checkUser,
+  checkEmail,
+  checkPasswords,
+  checkOldPassword,
+  checkResetPasswordToken,
 } = require('../middlewares/auth');
 const {
-  valid_registration,
-  unique_email,
-  unique_username,
+  checkRegistrationForm,
+  IsUniqueEmail,
+  IsUniqueUsername,
 } = require('../middlewares/user');
 
 const router = express.Router();
 
 router.post(
   '/register',
-  [valid_registration, unique_email, unique_username],
+  [checkRegistrationForm, IsUniqueEmail, IsUniqueUsername],
   register
 );
-router.post('/login', [login_form_required, login_user_required], login);
-router.post(
-  '/send-email-verification',
-  [valid_email, valid_user],
-  confirmEmail
-);
+router.post('/login', [checkLoginForm, checkLoginUser], login);
+router.post('/send-email-verification', [checkEmail, checkUser], confirmEmail);
 router.post(
   '/reset-password/:token',
-  [valid_reset_password, valid_token_reset_password, valid_old_password],
+  [checkPasswords, checkResetPasswordToken, checkOldPassword],
   changePassword
 );
-router.get('/email-verify/:token', valid_token, activeAccount);
+router.get('/email-verify/:token', checkToken, activeAccount);
 
 module.exports = router;
 
