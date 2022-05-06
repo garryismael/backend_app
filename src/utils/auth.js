@@ -81,16 +81,12 @@ const IsNewUser = (user) => user !== null && !user.estverifie;
 
 const checkTokenUserFactory = async (req, res, callback) => {
   const tokenData = verifyToken(req.params.token);
-  let verified = false;
   if (tokenData) {
     const { id } = tokenData;
     const user = await User.findByPk(id);
-    if (callback(user)) {
-      verified = true;
-      res.locals.user = user;
-    }
+    if (callback(user)) return user;
   }
-  return verified;
+  return null;
 };
 
 const IsNotNullUser = (user) => user !== null;
