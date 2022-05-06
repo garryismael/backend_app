@@ -48,9 +48,8 @@ const checkLoginUser = async (req, res, next) => {
 };
 
 const checkToken = async (req, res, next) => {
-  const user = await checkTokenUserFactory(req, res, IsNewUser);
-  if (!user) res.status(status.BAD_REQUEST).send();
-  res.locals.user = user;
+  const verified = await checkTokenUserFactory(req, res, IsNewUser);
+  if (!verified) res.status(status.BAD_REQUEST).send();
   next();
 };
 
@@ -83,9 +82,8 @@ const checkPasswords = async (req, res, next) => {
 
 // checkResetPasswordToken
 const checkResetPasswordToken = async (req, res, next) => {
-  const user = await checkTokenUserFactory(req, res, IsNotNullUser);
-  if (!user) res.status(status.BAD_REQUEST).send();
-  res.locals.user = user;
+  const verified = await checkTokenUserFactory(req, res, IsNotNullUser);
+  if (!verified) res.status(status.BAD_REQUEST).send();
   next();
 };
 
