@@ -1,8 +1,7 @@
 const supertest = require('supertest');
 const httpStatus = require('http-status');
 const app = require('../app');
-const User = require('../src/models/user');
-const db = require('../src/config/database');
+const { token } = require('morgan');
 
 jest.mock('../src/utils/email', () => {
   return {
@@ -12,16 +11,13 @@ jest.mock('../src/utils/email', () => {
 
 describe('Test Authentication Route', () => {
   const data = {
-    nom: 'tata',
-    username: 'tata',
-    email: 'tata@gmail.com',
+    nom: 'User',
+    username: 'user',
+    email: 'user@gmail.com',
     password: 'password',
   };
 
-  // Delete All Table Data
-  beforeEach(async () => {
-    await db.sync({ force: true });
-  });
+  let token;
 
   it('Register A User', async () => {
     const response = await supertest(app).post('/api/auth/register').send(data);
@@ -29,15 +25,32 @@ describe('Test Authentication Route', () => {
   });
 
   it('Register a user with username existed', async () => {
-    await User.build(data).save();
-    const response = await supertest(app).post('/api/auth/register').send(data);
+    const response = await supertest(app).post('/api/auth/register').send({
+      nom: 'User',
+      username: 'user',
+      email: 'edit@gmail.com',
+      password: 'password',
+    });
     expect(response.status).toEqual(httpStatus.BAD_REQUEST);
   });
 
   it('Register a user with email already existed', async () => {
-    await User.build(data).save();
-    const response = await supertest(app).post('/api/auth/register').send(data);
+    const response = await supertest(app).post('/api/auth/register').send({
+      nom: 'User',
+      username: 'edit',
+      email: 'user@gmail.com',
+      password: 'password',
+    });
     expect(response.status).toEqual(httpStatus.BAD_REQUEST);
+  });
+
+  it('Login a User', async () => {
+    const response = await supertest(app).post('/api/auth/login').send({
+      username: 'garry',
+      password: 'motdepasse',
+    });
+    token = response.body['token'];
+    expect(token).toBeDefined();
   });
 });
 
