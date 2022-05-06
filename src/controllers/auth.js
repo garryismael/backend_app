@@ -13,7 +13,7 @@ const register = async (req, res) => {
   const user = User.build(req.body);
   await user.save();
   await sendEmailForRegistration(user);
-  return res.status(status.OK).send();
+  return res.status(status.CREATED).send();
 };
 
 const login = async (req, res) => {
