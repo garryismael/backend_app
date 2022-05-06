@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const User = require('../models/user');
 
 // lister les utilisateurs
-const get_users = async (req, res) => {
+const getUsers = async (req, res) => {
   const users = await User.findAll({
     attributes: { exclude: 'password' },
   });
@@ -10,6 +10,6 @@ const get_users = async (req, res) => {
 };
 
 module.exports = {
-  get_users,
+  getUsers,
 };
 
