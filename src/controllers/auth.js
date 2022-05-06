@@ -25,7 +25,7 @@ const login = async (req, res) => {
   });
 };
 
-const user_activation = async (req, res) => {
+const activeAccount = async (req, res) => {
   const user = res.locals.user;
   user.estverifie = true;
   await user.save();
@@ -33,7 +33,7 @@ const user_activation = async (req, res) => {
 };
 
 // Send Email For Reseting Password
-const send_email_confirmation = async (req, res) => {
+const confirmEmail = async (req, res) => {
   const user = res.locals.user;
   await sendEmailForResetPassword(user);
   return res.status(status.OK).json({
@@ -41,7 +41,7 @@ const send_email_confirmation = async (req, res) => {
   });
 };
 
-const change_password = async (req, res) => {
+const changePassword = async (req, res) => {
   const user = res.locals.user;
   user.password = hashPassword(req.body.newPassword);
   await user.save();
@@ -51,8 +51,8 @@ const change_password = async (req, res) => {
 module.exports = {
   register,
   login,
-  user_activation,
-  change_password,
-  send_email_confirmation,
+  activeAccount,
+  changePassword,
+  confirmEmail,
 };
 

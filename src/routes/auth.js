@@ -1,10 +1,10 @@
 const express = require('express');
 const {
   register,
-  user_activation,
+  activeAccount,
   login,
-  send_email_confirmation,
-  change_password,
+  confirmEmail,
+  changePassword,
 } = require('../controllers/auth');
 const {
   valid_token,
@@ -33,14 +33,14 @@ router.post('/login', [login_form_required, login_user_required], login);
 router.post(
   '/send-email-verification',
   [valid_email, valid_user],
-  send_email_confirmation
+  confirmEmail
 );
 router.post(
   '/reset-password/:token',
   [valid_reset_password, valid_token_reset_password, valid_old_password],
-  change_password
+  changePassword
 );
-router.get('/email-verify/:token', valid_token, user_activation);
+router.get('/email-verify/:token', valid_token, activeAccount);
 
 module.exports = router;
 
