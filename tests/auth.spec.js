@@ -16,8 +16,6 @@ describe('Test Authentication Route', () => {
     password: 'password',
   };
 
-  let token;
-
   it('Register A User', async () => {
     const response = await supertest(app).post('/api/auth/register').send(data);
     expect(response.status).toEqual(httpStatus.CREATED);
@@ -43,13 +41,14 @@ describe('Test Authentication Route', () => {
     expect(response.status).toEqual(httpStatus.BAD_REQUEST);
   });
 
-  it('Login a User', async () => {
+  it('Sign In a User', async () => {
     const response = await supertest(app).post('/api/auth/login').send({
       username: 'garry',
       password: 'motdepasse',
     });
-    token = response.body['token'];
+    const token = response.body['token'];
     expect(token).toBeDefined();
+    expect(response.body['user']['username']).toBe('garry');
   });
 });
 
