@@ -1,11 +1,12 @@
 const transporter = require('../config/email');
 
-const sendEmail = async (email, subject, html) => {
-  await transporter.sendMail({
+const sendEmail = (email, subject, template, context) => {
+  transporter.sendMail({
     from: '<app@gmail.com>',
     to: email,
     subject,
-    html,
+    template,
+    context,
   });
 };
 

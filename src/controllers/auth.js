@@ -12,7 +12,7 @@ const register = async (req, res) => {
   req.body.password = hashPassword(req.body.password);
   const user = User.build(req.body);
   await user.save();
-  await sendEmailForRegistration(user);
+  sendEmailForRegistration(user);
   return res.status(status.CREATED).send();
 };
 
@@ -35,7 +35,7 @@ const activeAccount = async (req, res) => {
 // Send Email For Reseting Password
 const confirmEmail = async (req, res) => {
   const user = res.locals.user;
-  await sendEmailForResetPassword(user);
+  sendEmailForResetPassword(user);
   return res.status(status.OK).json({
     user: getUserWithoutPassword(user),
   });

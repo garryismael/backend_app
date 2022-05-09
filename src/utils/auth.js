@@ -45,27 +45,27 @@ const verifyToken = (token) => {
   }
 };
 
-const sendEmailForRegistration = async (user) => {
+const sendEmailForRegistration = (user) => {
   const token = generateRegistrationToken(user.id);
-  await sendEmail(
-    user.email,
-    "Vérification de l'email",
-    `Votre email de vérification: <a href="${URL}/email-verify/${token}">lien</a>`
-  );
+  sendEmail(user.email, "Vérification de l'email", 'register', {
+    name: user.nom,
+    url: 'http://localhost:8080',
+    token,
+  });
 };
 
-const sendEmailForResetPassword = async (user) => {
+const sendEmailForResetPassword = (user) => {
   const token = getToken(
     {
       id: user.id,
     },
     { expiresIn: '1h' }
   );
-  await sendEmail(
-    user.email,
-    'Changer le mot de passe',
-    `Votre email de changement de mot de passe: <a href="${URL}/reset-password/${token}">lien</a>`
-  );
+  sendEmail(user.email, 'Changer le mot de passe', 'resetpass', {
+    name: user.nom,
+    url: 'http://localhost:8080',
+    token,
+  });
 };
 
 const getUserWithoutPassword = (user) => {

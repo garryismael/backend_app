@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
+const hbc = require('nodemailer-express-handlebars');
+const path = require('path');
 
-module.exports = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   host: 'smtp.mailtrap.io',
   port: 2525,
   auth: {
@@ -8,3 +10,15 @@ module.exports = nodemailer.createTransport({
     pass: process.env.MAIL_PASS,
   },
 });
+
+const handlebarOptions = {
+  viewEngine: {
+    partialsDir: path.resolve('./views/'),
+    defaultLayout: false,
+  },
+  viewPath: path.resolve('./views/'),
+};
+
+transporter.use('compile', hbs(handlebarOptions));
+
+module.exports = transporter;
