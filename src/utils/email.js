@@ -1,4 +1,5 @@
 const transporter = require('../config/email');
+const path = require('path');
 
 const sendEmail = (email, subject, template, context) => {
   transporter.sendMail({
@@ -7,6 +8,13 @@ const sendEmail = (email, subject, template, context) => {
     subject,
     template,
     context,
+    attachments: [
+      {
+        filename: 'email.png',
+        path: path.resolve('./public/images/') + '/email.png',
+        cid: 'emailImage'
+      },
+    ],
   });
 };
 
