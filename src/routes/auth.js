@@ -36,7 +36,7 @@ router.post(
   [checkPasswords, checkResetPasswordToken, checkOldPassword],
   changePassword
 );
-router.get('/email-verify/:token', checkToken, activeAccount);
+router.post('/email-verify/:token', checkToken, activeAccount);
 
 module.exports = router;
 
