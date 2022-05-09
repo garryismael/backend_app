@@ -5,4 +5,8 @@ const router = express.Router();
 
 router.get('', loginRequired, allUsers);
 router.get('/me', loginRequired, activeUser);
+router.get('/hello', (req, res) => {
+  res.json({ hello: 'world' });
+});
 module.exports = router;
+
