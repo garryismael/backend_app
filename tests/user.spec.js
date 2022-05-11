@@ -1,6 +1,6 @@
 const supertest = require('supertest');
 const httpStatus = require('http-status');
-const app = require('../app');
+const app = require('../index');
 
 describe('Test User', () => {
   let token;
