@@ -9,4 +9,4 @@ Steps to run this project:
   * MAIL_USER=value
   * MAIL_PASS=value
   * FRONTEND_URL=value
-* Run `npm start` command or run `npm run jest` to test application
+* Run `npm start` command or run `npm run jest` to test the application
