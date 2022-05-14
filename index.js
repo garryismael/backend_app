@@ -30,8 +30,5 @@ app.use("/api/users", userRouter);
 app.use("/api/article", articleRouter);
 app.use("/api/forfait", forfaitRouter);
 
-(async function () {
-  sequelize.sync({ force: true });
-})();
 
 module.exports = app;

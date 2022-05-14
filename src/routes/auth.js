@@ -5,6 +5,7 @@ const {
   login,
   confirmEmail,
   changePassword,
+  imageUrl,
 } = require('../controllers/auth');
 const {
   checkToken,
@@ -19,14 +20,14 @@ const {
 const {
   checkRegistrationForm,
   IsUniqueEmail,
-  IsUniqueUsername,
+  checkUploadImageForm,
 } = require('../middlewares/user');
 
 const router = express.Router();
 
 router.post(
   '/register',
-  [checkRegistrationForm, IsUniqueEmail, IsUniqueUsername],
+  [checkRegistrationForm, checkUploadImageForm, IsUniqueEmail],
   register
 );
 router.post('/login', [checkLoginForm, checkLoginUser], login);
@@ -37,6 +38,7 @@ router.post(
   changePassword
 );
 router.post('/email-verify/:token', checkToken, activeAccount);
+router.get('/profile/:name', imageUrl);
 
 module.exports = router;
 
