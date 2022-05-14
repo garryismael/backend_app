@@ -11,6 +11,7 @@ const upload = require("express-fileupload");
 const authRouter = require("./src/routes/auth");
 const userRouter = require("./src/routes/user");
 const forfaitRouter = require("./src/controllers/forfait");
+const sequelize = require("./src/config/database");
 
 const app = express();
 
