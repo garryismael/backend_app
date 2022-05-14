@@ -8,6 +8,7 @@ const Forfait = sequelize.define(
     forfait_name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     typeData: {
       type: DataTypes.STRING,

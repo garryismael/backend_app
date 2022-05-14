@@ -34,7 +34,10 @@ Router.post(
         typeData: req.body.typeData.toString(),
         emplacement: req.body.emplacement.toString(),
       })
-      .then((forfait) => res.json(forfait));
+      .then((forfait) => res.json(forfait))
+      .catch((e) => {
+        res.json(e.errors);
+      });
   }
 );
 
@@ -54,14 +57,28 @@ Router.put(
     }
 
     forfait
-      .upsert({
-        id: req.params.id,
-        ...req.body,
-        typeData: req.body.typeData.toString(),
-        emplacement: req.body.emplacement.toString(),
-      })
+      .update(
+        {
+          ...req.body,
+          typeData: req.body.typeData.toString(),
+          emplacement: req.body.emplacement.toString(),
+        },
+        {
+          where: {
+            id: req.params.id,
+          },
+        }
+      )
       .then((forfait) => res.json(forfait));
   }
 );
+
+Router.delete("/:id", param("id").isNumeric().notEmpty(), async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  res.json(await forfait.destroy({ where: { id: req.params.id } }));
+});
 
 module.exports = Router;
