@@ -81,6 +81,17 @@ const checkUser = async (req, res, next) => {
 	}
 };
 
+const checkUserById = async (req, res, next) => {
+	const user = await findOneBy({
+		id: req.params.id,
+	});
+	if (!user) res.status(status.NOT_FOUND).send();
+	else {
+		res.locals.user = user;
+		next();
+	}
+};
+
 // Reset Password
 const checkPasswords = async (req, res, next) => {
 	const validation = resetPasswordSchema.validate(req.body, {
@@ -131,5 +142,6 @@ module.exports = {
 	checkPasswords,
 	checkResetPasswordToken,
 	checkOldPassword,
+	checkUserById,
 };
 

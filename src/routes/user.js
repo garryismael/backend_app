@@ -1,11 +1,20 @@
 const express = require("express");
 const { loginRequired } = require("../middlewares/auth");
-const { allUsers, activeUser } = require("../controllers/user");
+const { allUsers, activeUser, editUser } = require("../controllers/user");
+const {
+	checkEditionForm,
+	checkUploadImageForm,
+} = require("../middlewares/user");
 const router = express.Router();
 
 router.get("", loginRequired, allUsers);
 router.get("/me", loginRequired, activeUser);
-router.get("/hello", (req, res) => {
-  res.json({ hello: "world" });
-});
+router.post(
+	"/:id",
+	loginRequired,
+	[checkEditionForm, checkUploadImageForm],
+	editUser,
+);
+
 module.exports = router;
+
