@@ -12,6 +12,8 @@ const authRouter = require('./src/routes/auth');
 const userRouter = require('./src/routes/user');
 const articleRouter = require('./src/routes/article');
 
+const sequelize = require('./src/config/database');
+
 const app = express();
 
 app.use(logger('dev'));
@@ -25,5 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/article', articleRouter);
+
+(async function() {
+    sequelize.sync({ force: true})
+})();
 
 module.exports = app;

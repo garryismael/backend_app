@@ -1,8 +1,0 @@
-tests
-global
-coverage
-public
-jest.config.js
-README.md
-.env.test
-bin
