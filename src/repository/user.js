@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const {User} = require('../models/model');
 
 const findOneBy = async (search) => {
   return await User.findOne({

@@ -1,6 +1,6 @@
 const httpStatus = require("http-status");
 const drive = require("../config/deta");
-const User = require("../models/user");
+const {User} = require("../models/model");
 const { getUserWithoutPassword } = require("../utils/auth");
 
 // lister les utilisateurs

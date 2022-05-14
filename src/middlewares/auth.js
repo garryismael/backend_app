@@ -8,7 +8,7 @@ const {
 } = require("../utils/auth");
 const { resetPasswordSchema, emailSchema } = require("../validators/auth");
 const { loginSchema } = require("../validators/user");
-const User = require("../models/user");
+const {User} = require("../models/model");
 
 const JoiErrors = require("../utils/error");
 const loginRequired = async (req, res, next) => {
@@ -22,7 +22,6 @@ const loginRequired = async (req, res, next) => {
 			const user = await findOneBy({
 				id: user_id,
 				email,
-				estverifie: true,
 			});
 			if (user) {
 				res.locals.user = user;
