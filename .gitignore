@@ -3,3 +3,4 @@ node_modules/
 global/
 .deta/
 .env
+.env.test
