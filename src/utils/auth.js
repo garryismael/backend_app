@@ -71,7 +71,8 @@ const getUserWithoutPassword = (user) => {
 	return {
 		id: user.id,
 		nom: user.nom,
-		username: user.username,
+		prenom: user.prenom,
+		image: `profile/${user.image}`,
 		email: user.email,
 	};
 };
@@ -92,3 +93,4 @@ module.exports = {
 	IsNewUser,
 	IsNotNullUser,
 };
+

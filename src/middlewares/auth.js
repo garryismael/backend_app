@@ -46,7 +46,7 @@ const checkLoginForm = async (req, res, next) => {
 
 const checkLoginUser = async (req, res, next) => {
 	const user = await findOneBy({
-		username: req.body.username,
+		email: req.body.email,
 	});
 	const password = req.body.password;
 	let can_login = user !== null;

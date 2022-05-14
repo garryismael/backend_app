@@ -31,20 +31,9 @@ const IsUniqueEmail = async (req, res, next) => {
 	next();
 };
 
-const IsUniqueUsername = async (req, res, next) => {
-	const user = await findOneBy({ username: req.body.username });
-	if (user !== null) {
-		return res.status(status.BAD_REQUEST).json({
-			error: JoiErrors("Le nom d'utilisateur existe déjà", "username"),
-		});
-	}
-	next();
-};
-
 module.exports = {
 	checkRegistrationForm,
 	IsUniqueEmail,
-	IsUniqueUsername,
 	checkUploadImageForm,
 };
 

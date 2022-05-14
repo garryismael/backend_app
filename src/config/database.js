@@ -10,4 +10,3 @@ module.exports = new Sequelize(db_name, db_user, db_password, {
 	logging: false,
 	dialect: process.env.DATABASE_DIALECT,
 });
-

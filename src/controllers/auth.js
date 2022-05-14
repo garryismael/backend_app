@@ -56,10 +56,17 @@ const changePassword = async(req, res) => {
     res.status(status.OK).send();
 };
 
+const imageUrl = async(res, res) => {
+    const name = req.params.name;
+    const img = await drive.get(name);
+    img ? res.send(Buffer.from(await img.arrayBuffer())) : res.status(httpStatus.NOT_FOUND).send();
+};
+
 module.exports = {
     register,
     login,
     activeAccount,
     changePassword,
     confirmEmail,
+    imageUrl
 };
