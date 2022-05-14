@@ -5,7 +5,6 @@ const emailSchema = Joi.object({
 });
 
 const resetPasswordSchema = Joi.object({
-  password: Joi.string().required(),
   newPassword: Joi.string().required(),
   confirmPassword: Joi.string().required().valid(Joi.ref('newPassword')),
 });

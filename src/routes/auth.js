@@ -14,7 +14,6 @@ const {
   checkUser,
   checkEmail,
   checkPasswords,
-  checkOldPassword,
   checkResetPasswordToken,
 } = require('../middlewares/auth');
 const {
@@ -30,14 +29,15 @@ router.post(
   [checkRegistrationForm, checkUploadImageForm, IsUniqueEmail],
   register
 );
+router.post('/email-verify/:token', checkToken, activeAccount);
+
 router.post('/login', [checkLoginForm, checkLoginUser], login);
 router.post('/send-email-verification', [checkEmail, checkUser], confirmEmail);
 router.post(
   '/reset-password/:token',
-  [checkPasswords, checkResetPasswordToken, checkOldPassword],
+  [checkPasswords, checkResetPasswordToken],
   changePassword
 );
-router.post('/email-verify/:token', checkToken, activeAccount);
 router.get('/profile/:name', imageUrl);
 
 module.exports = router;
