@@ -1,10 +1,9 @@
-const { Sequelize } = require("../config/database");
-const forfait = require("./../models/forfait");
+const { Forfait } = require("./../models/model");
 const { param, validationResult, body } = require("express-validator");
 const Router = require("express").Router();
 
 Router.get("/", async (req, res) => {
-  return res.json(await forfait.findAll());
+  return res.json(await Forfait.findAll());
 });
 
 Router.get("/:id", param("id").isNumeric().notEmpty(), async (req, res) => {
@@ -12,7 +11,7 @@ Router.get("/:id", param("id").isNumeric().notEmpty(), async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  return res.json(await forfait.findOrFail({}));
+  return res.json(await Forfait.findOrFail({}));
 });
 Router.post(
   "/",
@@ -28,7 +27,7 @@ Router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    forfait
+    Forfait
       .create({
         ...req.body,
         typeData: req.body.typeData.toString(),
