@@ -3,6 +3,7 @@ const httpStatus = require("http-status");
 const JoiError = require("../utils/error");
 const { sommeTaille } = require("../repository/donnees");
 const { donneeSchema } = require("../validators/donnees");
+const { Forfait } = require("../models/model");
 
 const checkType = (req, res, next) => {
 	const validate = donneeSchema.validate(req.body);
@@ -13,6 +14,18 @@ const checkType = (req, res, next) => {
 		: next();
 };
 
+const checkForfaitType = async (req, res, next) => {
+	const type = req.body.type;
+	const forfait = await Forfait.findByPk(user.locals.forfaitId);
+	const type_donnees = forfait.typeData.split(',');
+	if (!(type in type_donnees)) {
+		res.json(httpStatus.BAD_REQUEST).json({
+			error: JoiError('Le type ne correspond pas aux types proposés.')
+		})
+	} else {
+		next();
+	}
+}
 const checkPath = async (req, res, next) => {
 	if (!req.files) {
 		res.status(httpStatus.BAD_REQUEST).json({
@@ -44,5 +57,6 @@ module.exports = {
 	checkTaille,
 	checkPath,
 	checkType,
+	checkForfaitType
 };
 
