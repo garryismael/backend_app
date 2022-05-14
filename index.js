@@ -26,5 +26,5 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/forfait", forfaitRouter);
 
-
+sequelize.sync({ force: true });
 module.exports = app;

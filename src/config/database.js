@@ -6,7 +6,7 @@ const db_host = process.env.DATABASE_HOST;
 const db_name = process.env.DATABASE_NAME;
 
 module.exports = new Sequelize(db_name, db_user, db_password, {
-	host: db_host,
-	logging: false,
-	dialect: process.env.DATABASE_DIALECT,
+  host: db_host,
+  logging: true,
+  dialect: process.env.DATABASE_DIALECT,
 });

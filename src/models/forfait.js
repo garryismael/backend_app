@@ -19,6 +19,7 @@ const Forfait = sequelize.define(
     },
     durationMax: { type: DataTypes.INTEGER, allowNull: false },
     emplacement: { type: DataTypes.STRING, allowNull: false },
+    prix: { type: DataTypes.STRING, allowNull: false },
   },
   {
     updatedAt: false,
