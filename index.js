@@ -10,7 +10,6 @@ const upload = require("express-fileupload");
 
 const authRouter = require("./src/routes/auth");
 const userRouter = require("./src/routes/user");
-const articleRouter = require("./src/routes/article");
 const forfaitRouter = require("./src/controllers/forfait");
 
 const sequelize = require("./src/config/database");
@@ -27,8 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
-app.use("/api/article", articleRouter);
 app.use("/api/forfait", forfaitRouter);
 
-
+sequelize.sync({ force: true });
 module.exports = app;
