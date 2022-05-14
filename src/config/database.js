@@ -8,6 +8,6 @@ const db_dialect = process.env.DATABASE_DIALECT;
 
 module.exports = new Sequelize(db_name, db_user, db_password, {
   host: db_host,
-  logging: false,
+  logging: true,
   dialect: db_dialect,
 });
