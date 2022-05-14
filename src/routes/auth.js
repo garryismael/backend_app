@@ -20,13 +20,14 @@ const {
   checkRegistrationForm,
   IsUniqueEmail,
   IsUniqueUsername,
+  checkUploadImageForm,
 } = require('../middlewares/user');
 
 const router = express.Router();
 
 router.post(
   '/register',
-  [checkRegistrationForm, IsUniqueEmail, IsUniqueUsername],
+  [checkRegistrationForm, checkUploadImageForm, IsUniqueEmail, IsUniqueUsername],
   register
 );
 router.post('/login', [checkLoginForm, checkLoginUser], login);

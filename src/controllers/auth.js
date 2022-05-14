@@ -7,9 +7,17 @@ const {
     sendEmailForResetPassword,
 } = require('../utils/auth');
 const User = require('../models/user');
+const drive = require('../config/deta');
 
 const register = async(req, res) => {
     req.body.password = hashPassword(req.body.password);
+    
+    //Upload file
+    const filename = req.files.image.name;
+    const contents = req.files.image.data;
+    req.body.image = filename;
+    await drive.put(filename, { data: contents });
+
     const user = User.build(req.body);
     await user.save();
     sendEmailForRegistration(user);

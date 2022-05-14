@@ -28,8 +28,5 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/article', articleRouter);
 
-(async function() {
-    sequelize.sync({ force: true})
-})();
 
 module.exports = app;
